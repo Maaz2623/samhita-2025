@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type EventInfo = {
   name: string;
@@ -79,6 +81,12 @@ export function SignupForm() {
   const [registeredEvents, setRegisteredEvents] = useState<
     { event: EventInfo; participants: string[] }[]
   >([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    regNo: "",
+    course: "",
+  });
 
   const toggleEvent = (event: EventInfo, checked: boolean) => {
     setRegisteredEvents((prev) =>
@@ -130,29 +138,67 @@ export function SignupForm() {
     );
   };
 
+  const handleChange = (key: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const validateForm = (): boolean => {
+    const { name, phone, regNo, course } = formData;
+
+    if (!name.trim()) {
+      toast.error("Please enter your full name");
+      return false;
+    }
+    if (!phone.trim()) {
+      toast.error("Please enter your phone number");
+      return false;
+    }
+    if (!regNo.trim()) {
+      toast.error("Please enter your registration number");
+      return false;
+    }
+    if (!course.trim()) {
+      toast.error("Please enter your course");
+      return false;
+    }
+    if (registeredEvents.length === 0) {
+      toast.error("Please select at least one event");
+      return false;
+    }
+
+    for (const { event, participants } of registeredEvents) {
+      const isGroup = event.type.toLowerCase().includes("group");
+      if (isGroup && participants.length === 0) {
+        toast.error(`Add participants for "${event.name}"`);
+        return false;
+      }
+      if (isGroup && participants.some((p) => !p.trim())) {
+        toast.error(`Please fill all participant names for "${event.name}"`);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const router = useRouter();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
-    const payload = {
-      name: formData.get("name"),
-      phone: formData.get("phone"),
-      regNo: formData.get("regNo"),
-      course: formData.get("course"),
-      events: registeredEvents,
-    };
+    if (!validateForm()) return;
+
+    const payload = { ...formData, events: registeredEvents };
     console.log(payload);
-    alert("Registration submitted successfully!");
+
+    router.push(`/success`);
   };
 
   return (
-    <main className="min-h-screen w-full bg-gradient-to-br from-green-50 to-white text-gray-900">
-      <section className="max-w-6xl mx-auto px-6 py-12">
+    <main className="min-h-screen w-full bg-gray-50 text-gray-900">
+      <section className="max-w-5xl mx-auto px-6 py-12">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-green-700 mb-2">
-            Samhitha Registration
-          </h1>
-          <p className="text-gray-600 max-w-xl mx-auto">
+          <h1 className="text-4xl font-bold mb-2">Samhitha Registration</h1>
+          <p className="text-gray-600 max-w-lg mx-auto">
             Fill your details and select the events you want to participate in.
           </p>
           <p className="text-sm text-gray-500 mt-3 italic">
@@ -161,30 +207,43 @@ export function SignupForm() {
           </p>
         </header>
 
-        {/* User Info Card */}
-        <Card className="p-6 mb-12 shadow-md rounded-2xl border-green-200">
-          <form onSubmit={handleSubmit} className="space-y-10">
+        <Card className="p-8 mb-12 shadow-lg rounded-2xl border border-gray-200">
+          <form onSubmit={handleSubmit} className="space-y-12">
             <div className="grid sm:grid-cols-2 gap-6">
-              <Input name="name" placeholder="Full Name" required />
+              <Input
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+              />
               <Input
                 name="phone"
                 type="number"
                 placeholder="Phone Number"
-                required
+                value={formData.phone}
+                onChange={(e) => handleChange("phone", e.target.value)}
               />
-              <Input name="regNo" placeholder="Registration Number" required />
-              <Input name="course" placeholder="Course" required />
+              <Input
+                name="regNo"
+                placeholder="Registration Number"
+                value={formData.regNo}
+                onChange={(e) => handleChange("regNo", e.target.value)}
+              />
+              <Input
+                name="course"
+                placeholder="Course"
+                value={formData.course}
+                onChange={(e) => handleChange("course", e.target.value)}
+              />
             </div>
 
-            <h2 className="text-2xl font-semibold text-green-700 mt-8">
+            <h2 className="text-2xl font-semibold mt-8 mb-6">
               Select Your Events
             </h2>
 
             {Object.entries(eventsData).map(([star, events]) => (
               <div key={star} className="mt-6">
-                <h3 className="text-xl font-semibold mb-4 text-gray-700">
-                  {star}
-                </h3>
+                <h3 className="text-xl font-medium mb-4">{star}</h3>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {events.map((event) => {
                     const isRegistered = registeredEvents.some(
@@ -199,8 +258,8 @@ export function SignupForm() {
                       <Card
                         key={event.name}
                         className={cn(
-                          "relative border p-5 rounded-2xl transition-all shadow-sm hover:shadow-lg hover:scale-[1.02] duration-200",
-                          isRegistered && "ring-2 ring-green-500 bg-green-50"
+                          "relative border p-5 rounded-2xl transition-all shadow-sm hover:shadow-md",
+                          isRegistered && "ring-1 ring-gray-400 bg-gray-50"
                         )}
                       >
                         <div className="flex justify-between items-start mb-3">
@@ -208,7 +267,7 @@ export function SignupForm() {
                             <h4 className="font-semibold text-lg mb-1">
                               {event.name}
                             </h4>
-                            <p className="text-sm text-gray-600 mb-2">
+                            <p className="text-sm text-gray-600 mb-1">
                               <strong>Type:</strong> {event.type}
                             </p>
                             <p className="text-xs text-gray-500 italic">
@@ -224,7 +283,6 @@ export function SignupForm() {
                           />
                         </div>
 
-                        {/* Group Participants */}
                         {isGroup && isRegistered && registeredEvent && (
                           <div className="mt-3 space-y-2">
                             <p className="text-sm font-medium text-gray-700">
@@ -276,7 +334,7 @@ export function SignupForm() {
             <div className="pt-10">
               <Button
                 type="submit"
-                className="w-full text-lg py-6 bg-green-600 hover:bg-green-700"
+                className="w-full text-lg py-5 bg-gray-900 text-white hover:bg-gray-800 transition-all"
               >
                 Submit Registration
               </Button>
