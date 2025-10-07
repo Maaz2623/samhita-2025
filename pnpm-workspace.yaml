@@ -1,4 +1,5 @@
 onlyBuiltDependencies:
   - '@tsparticles/engine'
+  - esbuild
   - react-tsparticles
   - tsparticles-engine

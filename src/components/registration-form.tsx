@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useTRPC } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
 
 type EventInfo = {
   name: string;
@@ -78,6 +80,12 @@ const eventsData: EventsByStar = {
 };
 
 export function SignupForm() {
+  const trpc = useTRPC();
+
+  const createRegistration = useMutation(
+    trpc.registration.create.mutationOptions()
+  );
+
   const [registeredEvents, setRegisteredEvents] = useState<
     { event: EventInfo; participants: string[] }[]
   >([]);
@@ -183,11 +191,14 @@ export function SignupForm() {
 
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     const payload = { ...formData, events: registeredEvents };
+
+    createRegistration.mutate(payload);
+
     console.log(payload);
 
     router.push(`/success`);

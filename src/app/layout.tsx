@@ -6,6 +6,7 @@ import {
   Cursor,
   CursorProvider,
 } from "@/components/animate-ui/components/animate/cursor";
+import { TRPCReactProvider } from "@/trpc/client";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,11 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
-        <CursorProvider>
-          <Cursor />
-          {children}
-          <Toaster position="top-center" />
-        </CursorProvider>
+        <TRPCReactProvider>
+          <CursorProvider>
+            <Cursor />
+            {children}
+            <Toaster position="top-center" />
+          </CursorProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

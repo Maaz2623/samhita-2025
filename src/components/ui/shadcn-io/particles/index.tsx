@@ -1,8 +1,8 @@
 'use client';
 
+import { cn } from "@/lib/utils";
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@repo/shadcn-ui/lib/utils";
 
 interface MousePosition {
   x: number;
