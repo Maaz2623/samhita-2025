@@ -6,10 +6,18 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
 
 type EventInfo = {
   name: string;
@@ -18,7 +26,6 @@ type EventInfo = {
 };
 
 type EventsByStar = Record<string, EventInfo[]>;
-
 const eventsData: EventsByStar = {
   "5 Star": [
     {
@@ -29,58 +36,108 @@ const eventsData: EventsByStar = {
     {
       name: "Duologue",
       type: "Group (2 in a team)",
-      description:
-        "Perform an engaging dialogue with your partner. Creativity counts!",
+      description: "Perform an engaging dialogue with your partner.",
     },
     {
       name: "Solo Singing",
       type: "Individual",
       description:
-        "Sing your heart out and impress the judges with your melody.",
+        "Sing your heart out and impress the judges with your vocal performance.",
+    },
+    {
+      name: "Solo Dance",
+      type: "Individual",
+      description:
+        "Showcase your best moves and rhythm within a limited time frame.",
+    },
+    {
+      name: "Ramp Walk",
+      type: "Individual",
+      description:
+        "Walk the ramp with confidence, style, and elegance while following the rules.",
     },
   ],
   "4 Star": [
     {
       name: "FIFA",
       type: "Individual",
-      description: "Compete in the ultimate virtual football challenge.",
+      description:
+        "Compete in the ultimate virtual football challenge played on PS5.",
     },
     {
       name: "Murder Mystery",
       type: "Group (2)",
       description:
-        "Solve a thrilling mystery with your teammate using logic and teamwork.",
+        "Solve a thrilling murder case by analyzing clues and working as a team.",
     },
     {
       name: "Entertainment Quiz",
       type: "Group (2)",
       description:
-        "Test your entertainment knowledge in movies, music, and pop culture.",
+        "Test your knowledge in entertainment, movies, and pop culture.",
+    },
+    {
+      name: "Air Crash",
+      type: "Individual",
+      description:
+        "Step into a fictional air crash scenario and defend your character’s survival story.",
+    },
+    {
+      name: "Debate",
+      type: "Individual",
+      description:
+        "Engage in a structured argument on current topics and showcase your debating skills.",
+    },
+    {
+      name: "Crisis Management",
+      type: "Group (2)",
+      description:
+        "Present a professional solution to a crisis scenario through teamwork and strategy.",
+    },
+    {
+      name: "Shark Tank",
+      type: "Group (2)",
+      description:
+        "Pitch your innovative business idea to potential investors in a competitive format.",
     },
   ],
   "3 Star": [
     {
       name: "On-Spot Photography",
       type: "Individual",
-      description: "Capture the perfect moment with your creative lens.",
+      description:
+        "Capture the perfect shot within the given time using your own camera or phone.",
     },
     {
       name: "Treasure Hunt",
       type: "Group (3)",
       description:
-        "Embark on an adventurous hunt for hidden clues and treasures.",
+        "Solve clues and race against time to uncover hidden treasures around the campus.",
     },
     {
       name: "Reel Making",
       type: "Individual",
       description:
-        "Create an engaging short video that showcases your creativity.",
+        "Create an engaging and original short reel that captures creativity and relevance.",
+    },
+    {
+      name: "Doodle Art",
+      type: "Individual",
+      description:
+        "Express your creativity by creating a themed doodle using your own art supplies.",
+    },
+    {
+      name: "Poster Making",
+      type: "Individual",
+      description:
+        "Design a digital poster on a given theme using tools like Photoshop or Canva.",
     },
   ],
 };
 
 export function SignupForm() {
   const trpc = useTRPC();
+  const router = useRouter();
 
   const createRegistration = useMutation(
     trpc.registration.create.mutationOptions()
@@ -101,6 +158,19 @@ export function SignupForm() {
       checked
         ? [...prev, { event, participants: [] }]
         : prev.filter((e) => e.event.name !== event.name)
+    );
+  };
+
+  const removeParticipant = (eventName: string, index: number) => {
+    setRegisteredEvents((prev) =>
+      prev.map((e) =>
+        e.event.name === eventName
+          ? {
+              ...e,
+              participants: e.participants.filter((_, i) => i !== index),
+            }
+          : e
+      )
     );
   };
 
@@ -133,226 +203,230 @@ export function SignupForm() {
     );
   };
 
-  const removeParticipant = (eventName: string, index: number) => {
-    setRegisteredEvents((prev) =>
-      prev.map((e) =>
-        e.event.name === eventName
-          ? {
-              ...e,
-              participants: e.participants.filter((_, i) => i !== index),
-            }
-          : e
-      )
-    );
-  };
-
-  const handleChange = (key: keyof typeof formData, value: string) => {
+  const handleChange = (key: keyof typeof formData, value: string) =>
     setFormData((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const validateForm = (): boolean => {
-    const { name, phone, regNo, course } = formData;
-
-    if (!name.trim()) {
-      toast.error("Please enter your full name");
-      return false;
-    }
-    if (!phone.trim()) {
-      toast.error("Please enter your phone number");
-      return false;
-    }
-    if (!regNo.trim()) {
-      toast.error("Please enter your registration number");
-      return false;
-    }
-    if (!course.trim()) {
-      toast.error("Please enter your course");
-      return false;
-    }
-    if (registeredEvents.length === 0) {
-      toast.error("Please select at least one event");
-      return false;
-    }
-
-    for (const { event, participants } of registeredEvents) {
-      const isGroup = event.type.toLowerCase().includes("group");
-      if (isGroup && participants.length === 0) {
-        toast.error(`Add participants for "${event.name}"`);
-        return false;
-      }
-      if (isGroup && participants.some((p) => !p.trim())) {
-        toast.error(`Please fill all participant names for "${event.name}"`);
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (
+      !formData.name ||
+      !formData.phone ||
+      !formData.regNo ||
+      !formData.course
+    ) {
+      toast.error("Please fill all details");
+      return;
+    }
+    if (registeredEvents.length === 0) {
+      toast.error("Select at least one event");
+      return;
+    }
 
     const payload = { ...formData, events: registeredEvents };
-
     createRegistration.mutate(payload);
-
-    console.log(payload);
-
-    router.push(`/success`);
+    router.push("/success");
   };
 
   return (
-    <main className="min-h-screen w-full bg-gray-50 text-gray-900">
-      <section className="max-w-5xl mx-auto px-6 py-12">
-        <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-2">Samhitha Registration</h1>
-          <p className="text-gray-600 max-w-lg mx-auto">
-            Fill your details and select the events you want to participate in.
+    <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+      {/* Background */}
+      <Image
+        src="/assets/registration-bg.jpg"
+        alt="Background"
+        fill
+        className="object-cover object-center z-0"
+      />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/60 z-10" />
+
+      {/* Content */}
+      <div className="relative z-20 w-full max-w-5xl px-6 py-20">
+        <header className="text-center text-white mb-12">
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-wide drop-shadow-lg">
+            Samhitha Registration
+          </h1>
+          <p className="text-gray-200 mt-2">
+            Fill your details and select the events you wish to participate in.
           </p>
-          <p className="text-sm text-gray-500 mt-3 italic">
-            ⚠️ For group events, only one member from each team needs to
-            register. Duplicate team registrations will not be accepted.
+          <p className="text-sm text-gray-400 mt-2 italic">
+            ⚠️ Only one team member should register for group events.
           </p>
         </header>
 
-        <Card className="p-8 mb-12 shadow-lg rounded-2xl border border-gray-200">
-          <form onSubmit={handleSubmit} className="space-y-12">
-            <div className="grid sm:grid-cols-2 gap-6">
-              <Input
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-              />
-              <Input
-                name="phone"
-                type="number"
-                placeholder="Phone Number"
-                value={formData.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
-              />
-              <Input
-                name="regNo"
-                placeholder="Registration Number"
-                value={formData.regNo}
-                onChange={(e) => handleChange("regNo", e.target.value)}
-              />
-              <Input
-                name="course"
-                placeholder="Course"
-                value={formData.course}
-                onChange={(e) => handleChange("course", e.target.value)}
-              />
-            </div>
+        <Card className="bg-white text-gray-900 border border-gray-200 shadow-2xl rounded-3xl p-10">
+          <fieldset disabled={createRegistration.isPending}>
+            <form onSubmit={handleSubmit} className="space-y-10">
+              {/* Inputs */}
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div className="flex flex-col gap-2">
+                  <label className="font-medium text-gray-700">Full Name</label>
+                  <Input
+                    placeholder="Enter your full name"
+                    className="bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-gray-800"
+                    value={formData.name}
+                    onChange={(e) => handleChange("name", e.target.value)}
+                  />
+                </div>
 
-            <h2 className="text-2xl font-semibold mt-8 mb-6">
-              Select Your Events
-            </h2>
+                <div className="flex flex-col gap-2">
+                  <label className="font-medium text-gray-700">
+                    Phone Number
+                  </label>
+                  <Input
+                    type="number"
+                    placeholder="Enter your phone number"
+                    className="bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-gray-800"
+                    value={formData.phone}
+                    onChange={(e) => handleChange("phone", e.target.value)}
+                  />
+                </div>
 
-            {Object.entries(eventsData).map(([star, events]) => (
-              <div key={star} className="mt-6">
-                <h3 className="text-xl font-medium mb-4">{star}</h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {events.map((event) => {
-                    const isRegistered = registeredEvents.some(
-                      (e) => e.event.name === event.name
-                    );
-                    const registeredEvent = registeredEvents.find(
-                      (e) => e.event.name === event.name
-                    );
-                    const isGroup = event.type.toLowerCase().includes("group");
+                <div className="flex flex-col gap-2">
+                  <label className="font-medium text-gray-700">
+                    Registration Number
+                  </label>
+                  <Input
+                    placeholder="Enter your registration number"
+                    className="bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-gray-800"
+                    value={formData.regNo}
+                    onChange={(e) => handleChange("regNo", e.target.value)}
+                  />
+                </div>
 
-                    return (
-                      <Card
-                        key={event.name}
-                        className={cn(
-                          "relative border p-5 rounded-2xl transition-all shadow-sm hover:shadow-md",
-                          isRegistered && "ring-1 ring-gray-400 bg-gray-50"
-                        )}
-                      >
-                        <div className="flex justify-between items-start mb-3">
-                          <div>
-                            <h4 className="font-semibold text-lg mb-1">
-                              {event.name}
-                            </h4>
-                            <p className="text-sm text-gray-600 mb-1">
-                              <strong>Type:</strong> {event.type}
-                            </p>
-                            <p className="text-xs text-gray-500 italic">
-                              {event.description}
-                            </p>
-                          </div>
-
-                          <Checkbox
-                            checked={isRegistered}
-                            onCheckedChange={(checked) =>
-                              toggleEvent(event, checked as boolean)
-                            }
-                          />
-                        </div>
-
-                        {isGroup && isRegistered && registeredEvent && (
-                          <div className="mt-3 space-y-2">
-                            <p className="text-sm font-medium text-gray-700">
-                              Participants
-                            </p>
-                            {registeredEvent.participants.map((p, i) => (
-                              <div key={i} className="flex items-center gap-2">
-                                <Input
-                                  type="text"
-                                  placeholder={`Participant ${i + 1}`}
-                                  value={p}
-                                  onChange={(e) =>
-                                    handleParticipantChange(
-                                      event.name,
-                                      i,
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="icon"
-                                  className="text-red-500 hover:text-red-700"
-                                  onClick={() =>
-                                    removeParticipant(event.name, i)
-                                  }
-                                >
-                                  ➖
-                                </Button>
-                              </div>
-                            ))}
-                            <Button
-                              type="button"
-                              size="sm"
-                              onClick={() => addParticipant(event.name)}
-                            >
-                              + Add Participant
-                            </Button>
-                          </div>
-                        )}
-                      </Card>
-                    );
-                  })}
+                <div className="flex flex-col gap-2">
+                  <label className="font-medium text-gray-700">Course</label>
+                  <Select
+                    onValueChange={(value) => handleChange("course", value)}
+                    value={formData.course}
+                  >
+                    <SelectTrigger className="bg-gray-100 border-gray-300 text-gray-900 focus-visible:ring-2 focus-visible:ring-gray-800">
+                      <SelectValue placeholder="Select your course" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="BBA">BBA</SelectItem>
+                      <SelectItem value="BBA Aviation">BBA Aviation</SelectItem>
+                      <SelectItem value="BCOM A">BCOM A</SelectItem>
+                      <SelectItem value="BCOM B">BCOM B</SelectItem>
+                      <SelectItem value="BCA">BCA</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-            ))}
 
-            <div className="pt-10">
-              <Button
-                type="submit"
-                className="w-full text-lg py-5 bg-gray-900 text-white hover:bg-gray-800 transition-all"
-              >
-                Submit Registration
-              </Button>
-            </div>
-          </form>
+              {/* Events */}
+              <div>
+                <h2 className="text-2xl font-semibold mb-4 text-center">
+                  Select Your Events
+                </h2>
+                {Object.entries(eventsData).map(([star, events]) => (
+                  <div key={star} className="mt-6">
+                    <h3 className="text-xl font-medium mb-4">{star}</h3>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {events.map((event) => {
+                        const isRegistered = registeredEvents.some(
+                          (e) => e.event.name === event.name
+                        );
+                        const registeredEvent = registeredEvents.find(
+                          (e) => e.event.name === event.name
+                        );
+                        const isGroup = event.type
+                          .toLowerCase()
+                          .includes("group");
+
+                        return (
+                          <Card
+                            key={event.name}
+                            className={cn(
+                              "relative border p-5 rounded-2xl transition-all shadow-sm hover:shadow-md",
+                              isRegistered && "ring-1 ring-gray-400 bg-gray-50"
+                            )}
+                          >
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <h4 className="font-semibold text-lg mb-1">
+                                  {event.name}
+                                </h4>
+                                <p className="text-sm text-gray-600 mb-1">
+                                  <strong>Type:</strong> {event.type}
+                                </p>
+                                <p className="text-xs text-gray-500 italic">
+                                  {event.description}
+                                </p>
+                              </div>
+
+                              <Checkbox
+                                checked={isRegistered}
+                                onCheckedChange={(checked) =>
+                                  toggleEvent(event, checked as boolean)
+                                }
+                              />
+                            </div>
+
+                            {isGroup && isRegistered && registeredEvent && (
+                              <div className="mt-3 space-y-2">
+                                <p className="text-sm font-medium text-gray-700">
+                                  Participants
+                                </p>
+                                {registeredEvent.participants.map((p, i) => (
+                                  <div
+                                    key={i}
+                                    className="flex items-center gap-2"
+                                  >
+                                    <Input
+                                      type="text"
+                                      placeholder={`Participant ${i + 1}`}
+                                      value={p}
+                                      onChange={(e) =>
+                                        handleParticipantChange(
+                                          event.name,
+                                          i,
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="icon"
+                                      className="text-red-500 hover:text-red-700"
+                                      onClick={() =>
+                                        removeParticipant(event.name, i)
+                                      }
+                                    >
+                                      ➖
+                                    </Button>
+                                  </div>
+                                ))}
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  onClick={() => addParticipant(event.name)}
+                                >
+                                  + Add Participant
+                                </Button>
+                              </div>
+                            )}
+                          </Card>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Submit */}
+              <div className="pt-8">
+                <Button
+                  type="submit"
+                  className="w-full py-5 bg-gray-900 text-white text-lg font-semibold rounded-2xl hover:bg-gray-800 transition-all"
+                >
+                  Submit Registration
+                </Button>
+              </div>
+            </form>
+          </fieldset>
         </Card>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }

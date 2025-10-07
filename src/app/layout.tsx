@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import {
-  Cursor,
-  CursorProvider,
-} from "@/components/animate-ui/components/animate/cursor";
 import { TRPCReactProvider } from "@/trpc/client";
 
 const poppins = Poppins({
@@ -27,11 +23,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
         <TRPCReactProvider>
-          <CursorProvider>
-            <Cursor />
-            {children}
-            <Toaster position="top-center" />
-          </CursorProvider>
+          {children}
+          <Toaster position="top-center" />
         </TRPCReactProvider>
       </body>
     </html>
