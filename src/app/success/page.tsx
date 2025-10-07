@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { gsap } from "gsap";
+import Image from "next/image";
 
 export default function ConfettiOnLoad() {
   const textRef = useRef<HTMLDivElement>(null);
@@ -11,7 +12,24 @@ export default function ConfettiOnLoad() {
   useEffect(() => {
     // --- Confetti Side Cannons ---
     const end = Date.now() + 3 * 1000; // 3 seconds
-    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+    const colors = [
+      "#a786ff",
+      "#fd8bbc",
+      "#eca184",
+      "#f8deb1",
+      "#ff6b6b",
+      "#6bc5ff",
+      "#ffd93d",
+      "#8aff8a",
+      "#ff8aff",
+      "#4d94ff",
+      "#ffb84d",
+      "#ff4da6",
+      "#00ffcc",
+      "#ff7f50",
+      "#d4ff7f",
+      "#ff5c5c",
+    ];
 
     const frame = () => {
       if (Date.now() > end) return;
@@ -68,15 +86,22 @@ export default function ConfettiOnLoad() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen relative">
+      <Image
+        src="/assets/success-lamp.jpg"
+        alt="Background"
+        fill
+        className="object-cover object-center z-0 scale-100"
+      />
+      <div className="absolute inset-0 bg-black/70 z-10" />
       <div
         ref={textRef}
-        className="text-4xl md:text-6xl font-extrabold text-purple-700 text-center"
+        className="text-4xl md:text-6xl font-extrabold z-100 text-white text-center"
       >
         🎉 Registration Confirmed! 🎉
       </div>
       <div
         ref={subtitleRef}
-        className="text-lg md:text-2xl text-gray-700 mt-4 text-center"
+        className="text-lg md:text-2xl text-white mt-4 text-center"
       >
         Thank you for registering. Your spot is secured!
       </div>
