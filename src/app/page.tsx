@@ -1,4 +1,5 @@
 "use client";
+
 import { Cairo } from "next/font/google";
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ChevronRightIcon } from "lucide-react";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -40,7 +42,7 @@ const Hero = () => {
     tl.fromTo(
       subtitleRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 1 },
+      { opacity: 1, y: 0, delay: 1.5, duration: 1 },
       "-=0.4"
     );
 
@@ -91,10 +93,17 @@ const Hero = () => {
           </div>
 
           <h1
-            ref={titleRef}
+            // ref={titleRef}
             className={`ext-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-lg ${cairo.className}`}
           >
-            Samhitha 2025
+            <TextAnimate
+              animation="slideUp"
+              duration={1.5}
+              delay={1}
+              by="character"
+            >
+              Samhitha 2025
+            </TextAnimate>
           </h1>
         </div>
 
@@ -113,7 +122,7 @@ const Hero = () => {
             size="lg"
             asChild
             variant="secondary"
-            className="px-10 bg-violet-900 text-white py-5 rounded-full text-lg font-medium hover:bg-violet-700 cursor-pointer shadow-lg transition-transform hover:scale-110 hover:shadow-violet-500/30"
+            className="px-10 bg-violet-900/70 text-white py-5 rounded-full text-lg font-medium hover:bg-violet-700 cursor-pointer shadow-lg transition-transform hover:scale-110 hover:shadow-violet-500/30"
           >
             <Link href="/register">
               Register Now
