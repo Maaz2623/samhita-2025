@@ -208,12 +208,7 @@ export function SignupForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      !formData.name ||
-      !formData.phone ||
-      !formData.regNo ||
-      !formData.course
-    ) {
+    if (!formData.name || !formData.phone || !formData.course) {
       toast.error("Please fill all details");
       return;
     }
@@ -278,18 +273,6 @@ export function SignupForm() {
                     className="bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-gray-800"
                     value={formData.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="font-medium text-gray-700">
-                    Registration Number
-                  </label>
-                  <Input
-                    placeholder="Enter your registration number"
-                    className="bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-gray-800"
-                    value={formData.regNo}
-                    onChange={(e) => handleChange("regNo", e.target.value)}
                   />
                 </div>
 

@@ -94,7 +94,7 @@ const Hero = () => {
 
           <h1
             // ref={titleRef}
-            className={`ext-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-lg ${cairo.className}`}
+            className={`text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-lg ${cairo.className}`}
           >
             <TextAnimate
               animation="slideUp"

@@ -6,7 +6,7 @@ export const registrationsTable = pgTable("registration_table", {
   // Basic user info
   name: varchar("name", { length: 100 }).notNull(),
   phone: varchar("phone", { length: 20 }).notNull(),
-  regNo: varchar("reg_no", { length: 50 }).notNull(),
+  regNo: varchar("reg_no", { length: 50 }),
   course: varchar("course", { length: 100 }).notNull(),
 
   // Store all selected events and participants
