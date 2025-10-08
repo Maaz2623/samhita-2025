@@ -148,6 +148,7 @@ export function SignupForm() {
   >([]);
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     phone: "",
     regNo: "",
     course: "",

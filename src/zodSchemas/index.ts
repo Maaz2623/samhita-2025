@@ -7,6 +7,7 @@ export const registrationInputSchema = z.object({
     .min(10, "Phone number must be at least 10 digits")
     .max(15, "Phone number seems too long"),
   regNo: z.string(),
+  email: z.string().min(100, "Email is required"),
   course: z.string().min(1, "Course is required"),
   events: z
     .array(
