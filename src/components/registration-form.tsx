@@ -66,13 +66,13 @@ const eventsData: EventsByStar = {
     },
     {
       name: "Murder Mystery",
-      type: "Group (2)",
+      type: "Group (2 in a team)",
       description:
         "Solve a thrilling murder case by analyzing clues and working as a team.",
     },
     {
       name: "Entertainment Quiz",
-      type: "Group (2)",
+      type: "Group (2 in a team)",
       description:
         "Test your knowledge in entertainment, movies, and pop culture.",
     },
@@ -90,13 +90,13 @@ const eventsData: EventsByStar = {
     },
     {
       name: "Crisis Management",
-      type: "Group (2)",
+      type: "Group (2 in a team)",
       description:
         "Present a professional solution to a crisis scenario through teamwork and strategy.",
     },
     {
       name: "Shark Tank",
-      type: "Group (2)",
+      type: "Group (2 in a team)",
       description:
         "Pitch your innovative business idea to potential investors in a competitive format.",
     },
@@ -110,7 +110,7 @@ const eventsData: EventsByStar = {
     },
     {
       name: "Treasure Hunt",
-      type: "Group (3)",
+      type: "Group (3 in a team)",
       description:
         "Solve clues and race against time to uncover hidden treasures around the campus.",
     },
