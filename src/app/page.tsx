@@ -102,7 +102,7 @@ const Hero = () => {
               delay={1}
               by="character"
             >
-              Samhitha 2025
+              Samhitha 2025-26
             </TextAnimate>
           </h1>
         </div>
