@@ -218,8 +218,14 @@ export function SignupForm() {
     }
 
     const payload = { ...formData, events: registeredEvents };
-    createRegistration.mutate(payload);
-    router.push("/success");
+    createRegistration.mutate(payload, {
+      onSuccess: () => {
+        router.push(`/success`);
+      },
+      onError: () => {
+        toast.error("Something went wrong. Try again.");
+      },
+    });
   };
 
   return (
