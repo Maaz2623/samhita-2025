@@ -59,10 +59,10 @@ const eventsData: EventsByStar = {
   ],
   "4 Star": [
     {
-      name: "FIFA",
+      name: "BGMI",
       type: "Individual",
       description:
-        "Compete in the ultimate virtual football challenge played on PS5.",
+        "No teams, no backup just you, your skills, and the battleground in this solo BGMI showdown",
     },
     {
       name: "Murder Mystery",
