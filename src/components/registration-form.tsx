@@ -250,7 +250,7 @@ export function SignupForm() {
             Fill your details and select the events you wish to participate in.
           </p>
           <p className="text-sm text-gray-400 mt-2 italic">
-            ⚠️ Only one team member should register for group events.
+            ⚠️ Only one team member should register on behalf of their team for group events. Make sure to enter the team members names.
           </p>
         </header>
 
