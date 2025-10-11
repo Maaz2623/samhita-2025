@@ -20,37 +20,43 @@ import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 
 type EventInfo = {
+  id: number;
   name: string;
   type: string;
   description: string;
 };
 
 type EventsByStar = Record<string, EventInfo[]>;
-const eventsData: EventsByStar = {
+export const eventsData: EventsByStar = {
   "5 Star": [
     {
+      id: 0,
       name: "Personality Hunt",
       type: "Individual",
       description: "Showcase your confidence, communication, and charisma.",
     },
     {
+      id: 1,
       name: "Duologue",
       type: "Group (2 in a team)",
       description: "Perform an engaging dialogue with your partner.",
     },
     {
+      id: 2,
       name: "Solo Singing",
       type: "Individual",
       description:
         "Sing your heart out and impress the judges with your vocal performance.",
     },
     {
+      id: 3,
       name: "Solo Dance",
       type: "Individual",
       description:
         "Showcase your best moves and rhythm within a limited time frame.",
     },
     {
+      id: 4,
       name: "Ramp Walk",
       type: "Individual",
       description:
@@ -59,42 +65,49 @@ const eventsData: EventsByStar = {
   ],
   "4 Star": [
     {
+      id: 5,
       name: "BGMI",
       type: "Individual",
       description:
         "No teams, no backup just you, your skills, and the battleground in this solo BGMI showdown",
     },
     {
+      id: 6,
       name: "Murder Mystery",
       type: "Group (2 in a team)",
       description:
         "Solve a thrilling murder case by analyzing clues and working as a team.",
     },
     {
+      id: 7,
       name: "Entertainment Quiz",
       type: "Group (2 in a team)",
       description:
         "Test your knowledge in entertainment, movies, and pop culture.",
     },
     {
+      id: 8,
       name: "Air Crash",
       type: "Individual",
       description:
         "Step into a fictional air crash scenario and defend your character’s survival story.",
     },
     {
+      id: 9,
       name: "Debate",
       type: "Individual",
       description:
         "Engage in a structured argument on current topics and showcase your debating skills.",
     },
     {
+      id: 10,
       name: "Crisis Management",
       type: "Group (2 in a team)",
       description:
         "Present a professional solution to a crisis scenario through teamwork and strategy.",
     },
     {
+      id: 11,
       name: "Shark Tank",
       type: "Group (2 in a team)",
       description:
@@ -103,30 +116,35 @@ const eventsData: EventsByStar = {
   ],
   "3 Star": [
     {
+      id: 12,
       name: "On-Spot Photography",
       type: "Individual",
       description:
         "Capture the perfect shot within the given time using your own camera or phone.",
     },
     {
+      id: 13,
       name: "Treasure Hunt",
       type: "Group (3 in a team)",
       description:
         "Solve clues and race against time to uncover hidden treasures around the campus.",
     },
     {
+      id: 14,
       name: "Reel Making",
       type: "Individual",
       description:
         "Create an engaging and original short reel that captures creativity and relevance.",
     },
     {
+      id: 15,
       name: "Doodle Art",
       type: "Individual",
       description:
         "Express your creativity by creating a themed doodle using your own art supplies.",
     },
     {
+      id: 16,
       name: "Poster Making",
       type: "Individual",
       description:
@@ -250,7 +268,8 @@ export function SignupForm() {
             Fill your details and select the events you wish to participate in.
           </p>
           <p className="text-sm text-gray-400 mt-2 italic">
-            ⚠️ Only one team member should register on behalf of their team for group events. Make sure to enter the team members names.
+            ⚠️ Only one team member should register on behalf of their team for
+            group events. Make sure to enter the team members names.
           </p>
         </header>
 
