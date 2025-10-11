@@ -37,6 +37,7 @@ export const registrationRouter = createTRPCRouter({
             name: registrationsTable.name,
             course: registrationsTable.course,
             events: registrationsTable.events,
+            phonNumber: registrationsTable.phone
           })
           .from(registrationsTable)
           .where(
@@ -56,6 +57,7 @@ export const registrationRouter = createTRPCRouter({
 
           return {
             id: reg.id,
+            phoneNumber: reg.phonNumber,
             name: reg.name,
             course: reg.course,
             participants: matchingEvent?.participants ?? [],

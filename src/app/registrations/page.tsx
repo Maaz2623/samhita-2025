@@ -138,40 +138,50 @@ export const eventsData: EventsByStar = {
 };
 const RegistrationsPage = () => {
   return (
-    <div className="flex w-full min-h-screen">
-      <div className="mx-auto w-1/2 flex flex-col items-center py-10 px-4">
-        <h1 className="text-4xl font-bold mb-8">Registrations</h1>
+  <div className="min-h-screen w-full flex justify-center bg-background">
+    <div className="max-w-5xl w-full px-4 py-10">
+      <h1 className="text-4xl font-bold text-center mb-10">Registrations</h1>
 
-        <div className="space-y-8 w-full">
-          {eventsData &&
-            Object.entries(eventsData).map(([stars, events]) => (
-              <div key={stars}>
-                <h2 className="text-2xl text-center font-semibold mb-4 text-gray-800">
-                  {stars} Star Events
-                </h2>
-                <div className="flex flex-col gap-4 justify-center bor">
-                  {events.map((event) => (
-                    <div className="mx-auto" key={event.name}>
-                      <Button
-                        variant="outline"
-                        className="w-[250px]"
-                        size={`lg`}
-                        asChild
-                      >
-                        <Link href={`/registrations/${event.id}`}>
-                          {event.name}
-                          <ChevronRightIcon className="ml-auto" />
-                        </Link>
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-        </div>
+      <div className="space-y-12">
+        {Object.entries(eventsData).map(([stars, events]) => (
+          <section key={stars} className="w-full">
+            <h2 className="text-2xl font-semibold text-center mb-6">
+              {stars} Events
+            </h2>
+
+            <div
+              className="
+                grid 
+                grid-cols-1 
+                sm:grid-cols-2 
+                md:grid-cols-3 
+                lg:grid-cols-4 
+                gap-5 
+                justify-items-center
+              "
+            >
+              {events.map((event) => (
+                <Button
+                  key={event.id}
+                  variant="outline"
+                  className="w-full sm:w-[220px] h-[60px] flex justify-between items-center text-base font-medium"
+                  size="lg"
+                  asChild
+                >
+                  <Link href={`/registrations/${event.id}`}>
+                    {event.name}
+                    <ChevronRightIcon className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default RegistrationsPage;
