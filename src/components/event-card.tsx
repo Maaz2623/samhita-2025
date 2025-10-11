@@ -11,6 +11,7 @@ type EventInfo = {
   name: string;
   type: string;
   description: string;
+  eventCap: number;
 };
 
 interface EventCardProps {
@@ -52,62 +53,76 @@ export const EventCard = ({
     )
   );
 
+  if (!data) return;
+
+  const isDisabled = data.length >= event.eventCap;
+
   return (
-    <Card
-      key={event.name}
-      className={cn(
-        "relative border p-5 rounded-2xl transition-all shadow-sm hover:shadow-md",
-        isRegistered && "ring-1 ring-gray-400 bg-gray-50"
-      )}
-    >
-      <div className="flex justify-between items-start mb-3">
-        <div>
-          <h4 className="font-semibold text-lg mb-1">{event.name}</h4>
-          <p className="text-sm text-gray-600 mb-1">
-            <strong>Type:</strong> {event.type}
-          </p>
-          <p className="text-xs text-gray-500 italic">{event.description}</p>
+    <fieldset disabled={isDisabled}>
+      <Card
+        key={event.name}
+        className={cn(
+          "relative border p-5 rounded-2xl transition-all shadow-sm hover:shadow-md",
+          isRegistered && "ring-1 ring-gray-400 bg-gray-50",
+          isDisabled && "border-red-500 ring-1 ring-red-400 bg-red-50"
+        )}
+      >
+        <div className="flex justify-between items-start mb-3">
+          <div>
+            <h4 className="font-semibold text-lg mb-1">{event.name}</h4>
+            <p className="text-sm text-gray-600 mb-1">
+              <strong>Type:</strong> {event.type}
+            </p>
+            <p className="text-xs text-gray-500 italic">{event.description}</p>
+          </div>
+
+          <Checkbox
+            checked={isRegistered}
+            onCheckedChange={(checked) =>
+              toggleEvent(event, checked as boolean)
+            }
+            disabled={isDisabled} // also disable the checkbox
+          />
         </div>
 
-        <Checkbox
-          checked={isRegistered}
-          onCheckedChange={(checked) => toggleEvent(event, checked as boolean)}
-        />
-      </div>
+        {isDisabled && (
+          <p className="text-red-600 font-medium mb-2">Maxed Out</p>
+        )}
 
-      {isGroup && isRegistered && registeredEvent && (
-        <div className="mt-3 space-y-2">
-          <p className="text-sm font-medium text-gray-700">Participants</p>
-          {registeredEvent.participants.map((p, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <Input
-                type="text"
-                placeholder={`Participant ${i + 1}`}
-                value={p}
-                onChange={(e) =>
-                  handleParticipantChange(event.name, i, e.target.value)
-                }
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="text-red-500 hover:text-red-700"
-                onClick={() => removeParticipant(event.name, i)}
-              >
-                ➖
-              </Button>
-            </div>
-          ))}
-          <Button
-            type="button"
-            size="sm"
-            onClick={() => addParticipant(event.name)}
-          >
-            + Add Participant
-          </Button>
-        </div>
-      )}
-    </Card>
+        {isGroup && isRegistered && registeredEvent && (
+          <div className="mt-3 space-y-2">
+            <p className="text-sm font-medium text-gray-700">Participants</p>
+            {registeredEvent.participants.map((p, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Input
+                  type="text"
+                  placeholder={`Participant ${i + 1}`}
+                  value={p}
+                  onChange={(e) =>
+                    handleParticipantChange(event.name, i, e.target.value)
+                  }
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="text-red-500 hover:text-red-700"
+                  onClick={() => removeParticipant(event.name, i)}
+                >
+                  ➖
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => addParticipant(event.name)}
+            >
+              + Add Participant
+            </Button>
+          </div>
+        )}
+      </Card>
+    </fieldset>
   );
 };

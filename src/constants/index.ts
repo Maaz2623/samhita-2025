@@ -4,17 +4,15 @@ export const eventsData = {
       id: 0,
       name: "Personality Hunt",
       type: "Individual",
-      description:
-        "Showcase your confidence, communication, and charisma.",
-      eventCap: null,
+      description: "Showcase your confidence, communication, and charisma.",
+      eventCap: 10,
     },
     {
       id: 1,
       name: "Duologue",
       type: "Group (2 in a team)",
-      description:
-        "Perform an engaging dialogue with your partner.",
-      eventCap: null,
+      description: "Perform an engaging dialogue with your partner.",
+      eventCap: 10,
     },
     {
       id: 2,
@@ -22,7 +20,7 @@ export const eventsData = {
       type: "Individual",
       description:
         "Sing your heart out and impress the judges with your vocal performance.",
-      eventCap: null,
+      eventCap: 10,
     },
     {
       id: 3,
@@ -30,7 +28,7 @@ export const eventsData = {
       type: "Individual",
       description:
         "Showcase your best moves and rhythm within a limited time frame.",
-      eventCap: null,
+      eventCap: 10,
     },
     {
       id: 4,
@@ -38,7 +36,7 @@ export const eventsData = {
       type: "Individual",
       description:
         "Walk the ramp with confidence, style, and elegance while following the rules.",
-      eventCap: null,
+      eventCap: 10,
     },
   ],
   "4 Star": [
@@ -48,7 +46,7 @@ export const eventsData = {
       type: "Individual",
       description:
         "No teams, no backup just you, your skills, and the battleground in this solo BGMI showdown",
-      eventCap: null,
+      eventCap: 20,
     },
     {
       id: 6,
@@ -56,7 +54,7 @@ export const eventsData = {
       type: "Group (2 in a team)",
       description:
         "Solve a thrilling murder case by analyzing clues and working as a team.",
-      eventCap: null,
+      eventCap: 12,
     },
     {
       id: 7,
@@ -64,7 +62,7 @@ export const eventsData = {
       type: "Group (2 in a team)",
       description:
         "Test your knowledge in entertainment, movies, and pop culture.",
-      eventCap: null,
+      eventCap: 10,
     },
     {
       id: 8,
@@ -72,7 +70,7 @@ export const eventsData = {
       type: "Individual",
       description:
         "Step into a fictional air crash scenario and defend your character’s survival story.",
-      eventCap: null,
+      eventCap: 10,
     },
     {
       id: 9,
@@ -80,7 +78,7 @@ export const eventsData = {
       type: "Individual",
       description:
         "Engage in a structured argument on current topics and showcase your debating skills.",
-      eventCap: null,
+      eventCap: 10,
     },
     {
       id: 10,
@@ -88,7 +86,7 @@ export const eventsData = {
       type: "Group (2 in a team)",
       description:
         "Present a professional solution to a crisis scenario through teamwork and strategy.",
-      eventCap: null,
+      eventCap: 6,
     },
     {
       id: 11,
@@ -96,7 +94,7 @@ export const eventsData = {
       type: "Group (2 in a team)",
       description:
         "Pitch your innovative business idea to potential investors in a competitive format.",
-      eventCap: null,
+      eventCap: 10,
     },
   ],
   "3 Star": [
@@ -130,7 +128,7 @@ export const eventsData = {
       type: "Individual",
       description:
         "Express your creativity by creating a themed doodle using your own art supplies.",
-      eventCap: null,
+      eventCap: 10,
     },
     {
       id: 16,
