@@ -94,7 +94,7 @@ export const eventsData = {
       type: "Group (2 in a team)",
       description:
         "Pitch your innovative business idea to potential investors in a competitive format.",
-      eventCap: 10,
+      eventCap: 8,
     },
   ],
   "3 Star": [
