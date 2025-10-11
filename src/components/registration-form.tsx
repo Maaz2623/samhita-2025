@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
+import { EventCard } from "./event-card";
 
 type EventInfo = {
   id: number;
@@ -342,79 +343,17 @@ export function SignupForm() {
                           .includes("group");
 
                         return (
-                          <Card
+                          <EventCard
                             key={event.name}
-                            className={cn(
-                              "relative border p-5 rounded-2xl transition-all shadow-sm hover:shadow-md",
-                              isRegistered && "ring-1 ring-gray-400 bg-gray-50"
-                            )}
-                          >
-                            <div className="flex justify-between items-start mb-3">
-                              <div>
-                                <h4 className="font-semibold text-lg mb-1">
-                                  {event.name}
-                                </h4>
-                                <p className="text-sm text-gray-600 mb-1">
-                                  <strong>Type:</strong> {event.type}
-                                </p>
-                                <p className="text-xs text-gray-500 italic">
-                                  {event.description}
-                                </p>
-                              </div>
-
-                              <Checkbox
-                                checked={isRegistered}
-                                onCheckedChange={(checked) =>
-                                  toggleEvent(event, checked as boolean)
-                                }
-                              />
-                            </div>
-
-                            {isGroup && isRegistered && registeredEvent && (
-                              <div className="mt-3 space-y-2">
-                                <p className="text-sm font-medium text-gray-700">
-                                  Participants
-                                </p>
-                                {registeredEvent.participants.map((p, i) => (
-                                  <div
-                                    key={i}
-                                    className="flex items-center gap-2"
-                                  >
-                                    <Input
-                                      type="text"
-                                      placeholder={`Participant ${i + 1}`}
-                                      value={p}
-                                      onChange={(e) =>
-                                        handleParticipantChange(
-                                          event.name,
-                                          i,
-                                          e.target.value
-                                        )
-                                      }
-                                    />
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="icon"
-                                      className="text-red-500 hover:text-red-700"
-                                      onClick={() =>
-                                        removeParticipant(event.name, i)
-                                      }
-                                    >
-                                      ➖
-                                    </Button>
-                                  </div>
-                                ))}
-                                <Button
-                                  type="button"
-                                  size="sm"
-                                  onClick={() => addParticipant(event.name)}
-                                >
-                                  + Add Participant
-                                </Button>
-                              </div>
-                            )}
-                          </Card>
+                            addParticipant={addParticipant}
+                            handleParticipantChange={handleParticipantChange}
+                            removeParticipant={removeParticipant}
+                            toggleEvent={toggleEvent}
+                            event={event}
+                            isGroup={isGroup}
+                            isRegistered={isRegistered}
+                            registeredEvent={registeredEvent}
+                          />
                         );
                       })}
                     </div>
