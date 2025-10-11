@@ -26,6 +26,7 @@ type EventInfo = {
   name: string;
   type: string;
   description: string;
+  eventCap: number;
 };
 
 type EventsByStar = Record<string, EventInfo[]>;
